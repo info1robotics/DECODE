@@ -2,15 +2,15 @@ package org.firstinspires.ftc.teamcode.opmodes
 
 import androidx.annotation.CallSuper
 import com.pedropathing.follower.Follower
-import com.pedropathing.localization.Pose
-import com.pedropathing.util.Constants
+import com.pedropathing.geometry.Pose
+//import com.pedropathing.localization.Pose
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.common.ActionQueue
 import org.firstinspires.ftc.teamcode.common.GamepadEx
 import org.firstinspires.ftc.teamcode.common.Log
 import org.firstinspires.ftc.teamcode.enums.AutoStartPos
-import org.firstinspires.ftc.teamcode.pedro.constants.FConstants
-import org.firstinspires.ftc.teamcode.pedro.constants.LConstants
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants
+
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import org.firstinspires.ftc.teamcode.subsystems.Controller
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain
@@ -46,8 +46,7 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
         Drivetrain.initAuto(hardwareMap)
        // Limelight.init(hardwareMap)
 
-        Constants.setConstants(FConstants::class.java, LConstants::class.java)
-        follower = Follower(hardwareMap, FConstants::class.java, LConstants::class.java)
+        follower = Constants.createFollower(hardwareMap);
         follower.pose = startPose
         log = Log(this.telemetry)
 

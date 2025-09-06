@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.pinpoint
 
-import com.pedropathing.localization.Pose
+//import com.pedropathing.localization.Pose
+import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
@@ -14,30 +15,33 @@ object Pinpoint {
         return round(this * factor) / factor
     }
 
-    lateinit var pinpoint: com.pedropathing.localization.GoBildaPinpointDriver
+    //lateinit var pinpoint: com.pedropathing.localization.GoBildaPinpointDriver
 
     @JvmStatic
     fun init(hardwareMap: HardwareMap) {
+        /*
         pinpoint = hardwareMap.get(com.pedropathing.localization.GoBildaPinpointDriver::class.java, "pinpoint")
         pinpoint.setOffsets(89.5, 151.5)
         pinpoint.setEncoderResolution(com.pedropathing.localization.GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
         pinpoint.setEncoderDirections(com.pedropathing.localization.GoBildaPinpointDriver.EncoderDirection.REVERSED, com.pedropathing.localization.GoBildaPinpointDriver.EncoderDirection.REVERSED);
         pinpoint.resetPosAndIMU()
+
+         */
     }
 
     @JvmStatic
     fun reset() {
-        pinpoint.resetPosAndIMU()
+        //pinpoint.resetPosAndIMU()
     }
 
     @JvmStatic
     fun update() {
-        pinpoint.update()
+        //pinpoint.update()
     }
 
     @JvmStatic
-    fun getPosition(): Pose {
-        return pinpoint.position
+    fun getPosition() {
+        //return pinpoint.position
     }
 
 }
