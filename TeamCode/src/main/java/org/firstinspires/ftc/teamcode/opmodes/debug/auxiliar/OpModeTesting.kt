@@ -2,22 +2,22 @@ package org.firstinspires.ftc.teamcode.opmodes.debug.auxiliar
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.common.Log
 
 @TeleOp(name = "OpMode Test", group = "Test")
 class OpModeTesting : LinearOpMode() {
+    lateinit var log: Log
     override fun runOpMode() {
-        telemetry.addData("Status ", "Initialized")
-        telemetry.update()
 
+        log = Log(this.telemetry)
+        log.add("raco", "Started")
+        log.tick()
         waitForStart()
-
-        telemetry.addData("Status", "Started")
-        telemetry.update()
 
         while (opModeIsActive()) {
             // Keep telemetry updating if needed
-            telemetry.addData("Status", "Running")
-            telemetry.update()
+            log.add("Status", "Running")
+            log.tick()
         }
     }
 }

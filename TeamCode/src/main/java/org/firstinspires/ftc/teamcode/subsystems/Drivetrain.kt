@@ -112,34 +112,6 @@ object Drivetrain {
         setDriveMotorPower(0.0, 0.0, 0.0, 0.0)
     }
 
-    fun driveMecanumFieldCentric(
-        inAxial: Double,
-        inLateral: Double,
-        inYaw: Double,
-        heading: Double,
-        maxOutput: Double
-    ) {
-        val modMaintainMotorRatio: Double
-
-        val inputAxial = (inAxial * maxOutput)
-        val inputLateral = (inLateral * maxOutput) * LATERAL_MULTIPLIER
-        val inputYaw = (inYaw * maxOutput)
-
-        val botHeading = heading
-
-        val adjLateral = inputLateral * cos(botHeading) - inputAxial * sin(botHeading)
-        val adjAxial = inputLateral * sin(botHeading) + inputAxial * cos(botHeading)
-
-        modMaintainMotorRatio = max(abs(inputAxial) + abs(inputLateral) + abs(inputYaw), 1.0)
-
-        val leftFrontPower = (adjAxial + adjLateral + inputYaw) / modMaintainMotorRatio
-        val rightFrontPower = (adjAxial - adjLateral - inputYaw) / modMaintainMotorRatio
-        val leftBackPower = (adjAxial - adjLateral + inputYaw) / modMaintainMotorRatio
-        val rightBackPower = (adjAxial + adjLateral - inputYaw) / modMaintainMotorRatio
-
-        setDriveMotorPower(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower)
-    }
-
     fun setDriveMotorPower(
         leftFrontPower: Double,
         rightFrontPower: Double,
@@ -151,6 +123,7 @@ object Drivetrain {
         bl.power = leftBackPower
         br.power = rightBackPower
     }
+
     fun resetEncoders()
     {
         motors.forEach {
@@ -158,30 +131,6 @@ object Drivetrain {
             it.targetPosition = 0
             it.mode = RunMode.RUN_TO_POSITION
         }
-    }
-    fun coupled()
-    {
-        if(fl.mode!=RunMode.RUN_USING_ENCODER)
-        {
-            fl.mode = RunMode.RUN_USING_ENCODER
-            fr.mode = RunMode.RUN_USING_ENCODER
-
-        }
-
-        fl.targetPosition = fl.currentPosition
-        fr.targetPosition = fl.currentPosition
-
-        fl.mode = RunMode.RUN_TO_POSITION
-        fr.mode = RunMode.RUN_TO_POSITION
-
-        fl.power= 1.0
-        fr.power= 1.0
-
-    }
-    fun setPositionFront(target: Int)
-    {
-        fl.targetPosition = target
-        fr.targetPosition = target
     }
     fun getCurrentPosition(): Int {
         return fl.currentPosition
