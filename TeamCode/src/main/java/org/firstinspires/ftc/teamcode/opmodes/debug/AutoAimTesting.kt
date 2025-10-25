@@ -4,38 +4,31 @@ import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.Log
+import org.firstinspires.ftc.teamcode.subsystems.Glider
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 
 @TeleOp
 @Config
-class ShooterTesting : LinearOpMode() {
+class AutoAimTesting : LinearOpMode() {
     companion object {
         @JvmField
-        var rpm = 0.0
+        var distance = 0.0
     }
 
     private lateinit var log: Log
 
     override fun runOpMode() {
         Shooter.init(hardwareMap)
+        Glider.init(hardwareMap)
         log = Log(telemetry)
         waitForStart()
 
-        val ticksPerRev = 28.0
 
         while (opModeIsActive()) {
-            val voltage = hardwareMap.voltageSensor.iterator().next().voltage
+            Shooter.setRPM(Shooter.MIN_MAX_RPM)
+            Glider.autoAim(distance)
 
-            val targetVelocityTicksPerSec = (rpm * ticksPerRev) / 60.0
 
-            Shooter.setVelocity(targetVelocityTicksPerSec)
-
-            val currentTicksPerSec = Shooter.shooterFirst.velocity
-            val currentRPM = (currentTicksPerSec / ticksPerRev) * 60.0
-
-            log.add("Voltage", voltage)
-            log.add("Target RPM", rpm)
-            log.add("Current RPM", currentRPM)
             log.add("Shooter Power", Shooter.getPower())
             log.tick()
         }

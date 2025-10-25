@@ -6,7 +6,8 @@ import org.firstinspires.ftc.teamcode.roadrunner.TankDrive.Params
 object Controller {
     enum class State{ UNKNOWN,
         INIT,
-        VISION
+        VISION,
+        LOCKED
     }
     lateinit var state:State
 
@@ -29,7 +30,10 @@ object Controller {
     {
         state = State.VISION
     }
+    fun setLock()
+    {
 
+    }
 
 
 }
