@@ -12,7 +12,13 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter
 class AutoAimTesting : LinearOpMode() {
     companion object {
         @JvmField
+        var deg = 0.0
+        @JvmField
+        var rpm = 0.0
+        @JvmField
         var distance = 0.0
+        @JvmField
+        var tuning = true
     }
 
     private lateinit var log: Log
@@ -25,11 +31,22 @@ class AutoAimTesting : LinearOpMode() {
 
 
         while (opModeIsActive()) {
-            Shooter.setRPM(Shooter.MIN_MAX_RPM)
-            Glider.autoAim(distance)
-
-
+            if(tuning)
+            {
+                Shooter.setVelocityFromRPM(rpm)
+                Glider.setPositionDeg(deg)
+            }
+            else
+            {
+                Glider.autoAim(distance)
+                Shooter.setVelocityForDistance(distance)
+            }
+            log.add("if the tuning variable is true then you manually change the rpm and degrees" +
+                    "use this when editing the tables")
+            log.add("if it s false then you just give the distance and it calculates " +
+                    "the power and degree automatically use this to check if the trajectory is accurate")
             log.add("Shooter Power", Shooter.getPower())
+            log.add("Shooter RPM",Shooter.getCurrentRPM())
             log.tick()
         }
 

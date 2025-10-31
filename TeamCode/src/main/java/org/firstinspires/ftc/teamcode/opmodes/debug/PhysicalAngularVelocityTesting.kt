@@ -36,7 +36,7 @@ class PhysicalAngularVelocityTesting : LinearOpMode() {
 
             alfa.calculate(DISTANCE,CURRENT_RPS)
 
-            log.add("Current Draw",Shooter.getCurrentDraw())
+            log.add("Current Draw",Shooter.getVoltage())
             log.add("Average Draw per motor",Shooter.getAverageCurrent())
             log.add("Glider Position",Glider.getPosition())
             log.add("Shooter Power", power)

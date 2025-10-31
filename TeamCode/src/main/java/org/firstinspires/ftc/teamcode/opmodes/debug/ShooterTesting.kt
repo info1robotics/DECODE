@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.Log
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 
-@TeleOp
+@TeleOp(name = "Shooter RPM Test", group = "Debug")
 @Config
 class ShooterTesting : LinearOpMode() {
     companion object {
         @JvmField
-        var rpm = 0.0
+        var rpm = 0.0 // Set this in FTC Dashboard
     }
 
     private lateinit var log: Log
@@ -19,24 +19,19 @@ class ShooterTesting : LinearOpMode() {
     override fun runOpMode() {
         Shooter.init(hardwareMap)
         log = Log(telemetry)
+
         waitForStart()
 
-        val ticksPerRev = 28.0
-
         while (opModeIsActive()) {
-            val voltage = hardwareMap.voltageSensor.iterator().next().voltage
+            Shooter.setVelocityFromRPM(rpm)
 
-            val targetVelocityTicksPerSec = (rpm * ticksPerRev) / 60.0
+            val currentRPM = Shooter.getCurrentRPM()
+            val voltage = Shooter.getVoltage()
 
-            Shooter.setVelocity(targetVelocityTicksPerSec)
-
-            val currentTicksPerSec = Shooter.shooterFirst.velocity
-            val currentRPM = (currentTicksPerSec / ticksPerRev) * 60.0
-
-            log.add("Voltage", voltage)
             log.add("Target RPM", rpm)
             log.add("Current RPM", currentRPM)
             log.add("Shooter Power", Shooter.getPower())
+            log.add("Voltage", voltage)
             log.tick()
         }
 

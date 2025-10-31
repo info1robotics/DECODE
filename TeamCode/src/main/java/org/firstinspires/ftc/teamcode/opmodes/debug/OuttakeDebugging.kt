@@ -43,7 +43,7 @@ class OuttakeDebugging : LinearOpMode() {
 
 
             gamepadEx1.update()
-            log.add("Current Draw",Shooter.getCurrentDraw())
+            log.add("Current Draw",Shooter.getAverageCurrent())
             log.add("Average Draw per motor",Shooter.getAverageCurrent())
             log.add("Glider Position",Glider.getPosition())
             log.add("Shooter Power", power)
