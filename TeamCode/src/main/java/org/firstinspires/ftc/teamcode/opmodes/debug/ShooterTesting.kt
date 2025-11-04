@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.Log
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 
-@TeleOp(name = "Shooter RPM Test", group = "Debug")
+@TeleOp(group = "Debug")
 @Config
 class ShooterTesting : LinearOpMode() {
     companion object {
@@ -23,10 +23,10 @@ class ShooterTesting : LinearOpMode() {
         waitForStart()
 
         while (opModeIsActive()) {
-            Shooter.setVelocityFromRPM(rpm)
+            Shooter.setRPM(rpm)
 
-            val currentRPM = Shooter.getCurrentRPM()
-            val voltage = Shooter.getVoltage()
+            val currentRPM = Shooter.getRPM()
+            val voltage = Shooter.getRPM()
 
             log.add("Target RPM", rpm)
             log.add("Current RPM", currentRPM)

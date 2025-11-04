@@ -1,28 +1,21 @@
 package org.firstinspires.ftc.teamcode.subsystems
 
-import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
-import com.qualcomm.robotcore.hardware.PIDFCoefficients
 import com.qualcomm.robotcore.hardware.VoltageSensor
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
+import org.firstinspires.ftc.teamcode.opmodes.debug.ShooterTesting
+import org.firstinspires.ftc.teamcode.opmodes.debug.ShooterTesting.Companion
 import kotlin.math.max
+import kotlin.math.min
 
 object Shooter {
-    lateinit var shooterFirst: DcMotorEx
+    lateinit var shooterFirst: DcMotorEx//6000 gobilda rpm motor, final 8400 after gear ratio(140%)
     private lateinit var shooterSecond: DcMotorEx
     private lateinit var voltageSensor: VoltageSensor
 
-    private const val TICKS_PER_REV = 28.0
-    const val MAX_RPM = 6000.0
-
-    // 🔧 PIDF constants — tune these experimentally
-    private var kP = 0.0015
-    private var kI = 0.0001
-    private var kD = 0.0002
-    private var kF = 12.0 / (MAX_RPM * TICKS_PER_REV / 60.0) // Feedforward based on max voltage
-
+    public  const val MIN_MAX_RPM = 5800
     private val distanceRpmTable = listOf(
         0.5 to 3120.0,
         1.0 to 3300.0,
@@ -31,7 +24,6 @@ object Shooter {
         2.5 to 4000.0,
         3.0 to 4100.0
     )
-
     fun init(hardwareMap: HardwareMap) {
         shooterFirst = hardwareMap.get(DcMotorEx::class.java, "motorShooterFirst")
         shooterSecond = hardwareMap.get(DcMotorEx::class.java, "motorShooterSecond")
@@ -39,65 +31,61 @@ object Shooter {
         shooterFirst.direction = DcMotorSimple.Direction.REVERSE
         shooterSecond.direction = DcMotorSimple.Direction.REVERSE
 
-        val motorConfig = shooterFirst.motorType.clone()
-        motorConfig.achieveableMaxRPMFraction = 1.0
-        shooterFirst.motorType = motorConfig
-        shooterSecond.motorType = motorConfig
-
-        shooterFirst.mode = DcMotor.RunMode.RUN_USING_ENCODER
-        shooterSecond.mode = DcMotor.RunMode.RUN_USING_ENCODER
+        val motorConfigurationType = shooterFirst.motorType.clone()
+        motorConfigurationType.achieveableMaxRPMFraction = 1.0
+        shooterFirst.motorType = motorConfigurationType
+        shooterSecond.motorType = motorConfigurationType
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next()
-
-        // ✅ Apply PIDF coefficients
-        setPIDFCoefficients()
     }
 
-    private fun setPIDFCoefficients() {
-        val pidf = PIDFCoefficients(kP, kI, kD, kF)
-        shooterFirst.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf)
-        shooterSecond.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf)
+    fun setPower(power: Double) {
+
+        shooterFirst.power = power
+        shooterSecond.power = power
+    }
+    fun getPower(): Double {
+        return shooterFirst.power
     }
 
-    fun setVelocityFromRPM(rpm: Double) {
-        // Adjust F term for current voltage to keep output consistent
-        val voltageComp = 12.0 / max(1.0, getVoltage())
-        val adjustedF = kF * voltageComp
-
-        val pidf = PIDFCoefficients(kP, kI, kD, adjustedF)
-        shooterFirst.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf)
-        shooterSecond.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf)
-
-        val targetVelocityTicksPerSec = (rpm * TICKS_PER_REV) / 60.0
-        shooterFirst.velocity = targetVelocityTicksPerSec
-        shooterSecond.velocity = targetVelocityTicksPerSec
+    fun setVelocity(velocity: Double)
+    {
+        shooterFirst.velocity = velocity
+        shooterSecond.velocity = velocity
     }
-
-    fun getCurrentRPM(): Double {
+    fun setRPM(rpm:Double)
+    {
+        val targetVelocityTicksPerSec = (rpm * 28) / 60.0
+        shooterFirst.velocity=targetVelocityTicksPerSec
+        shooterSecond.velocity=targetVelocityTicksPerSec
+    }
+    fun getRPM(): Double {
         val currentTicksPerSec = shooterFirst.velocity
-        return (currentTicksPerSec / TICKS_PER_REV) * 60.0
+        val currentRPM = (currentTicksPerSec / 28) * 60.0
+        return currentRPM
     }
+
+
 
     fun stop() {
         shooterFirst.power = 0.0
         shooterSecond.power = 0.0
     }
 
-    fun setPower(power: Double) {
-        shooterFirst.power = power
-        shooterSecond.power = power
+    fun getCurrentDraw(): Double {
+        val currentFirst = shooterFirst.getCurrent(CurrentUnit.AMPS)
+        val currentSecond = shooterSecond.getCurrent(CurrentUnit.AMPS)
+        return currentFirst + currentSecond
     }
-
-    fun getPower(): Double = shooterFirst.power
-
-    fun getVoltage(): Double = voltageSensor.voltage
 
     fun getAverageCurrent(): Double {
-        val current1 = shooterFirst.getCurrent(CurrentUnit.AMPS)
-        val current2 = shooterSecond.getCurrent(CurrentUnit.AMPS)
-        return (current1 + current2) / 2.0
+        val currentFirst = shooterFirst.getCurrent(CurrentUnit.AMPS)
+        val currentSecond = shooterSecond.getCurrent(CurrentUnit.AMPS)
+        return (currentFirst + currentSecond) / 2.0
     }
-
+    fun getVelocity(): Double {
+        return  shooterFirst.velocity
+    }
     fun getRpmForDistance(distance: Double): Double {
         val clampedDistance = distance.coerceIn(
             distanceRpmTable.first().first,
@@ -118,6 +106,7 @@ object Shooter {
 
     fun setVelocityForDistance(distance: Double) {
         val targetRpm = getRpmForDistance(distance)
-        setVelocityFromRPM(targetRpm)
+        setRPM(targetRpm)
     }
+
 }

@@ -33,7 +33,7 @@ class AutoAimTesting : LinearOpMode() {
         while (opModeIsActive()) {
             if(tuning)
             {
-                Shooter.setVelocityFromRPM(rpm)
+                Shooter.setRPM(rpm)
                 Glider.setPositionDeg(deg)
             }
             else
@@ -46,7 +46,7 @@ class AutoAimTesting : LinearOpMode() {
             log.add("if it s false then you just give the distance and it calculates " +
                     "the power and degree automatically use this to check if the trajectory is accurate")
             log.add("Shooter Power", Shooter.getPower())
-            log.add("Shooter RPM",Shooter.getCurrentRPM())
+            log.add("Shooter RPM",Shooter.getRPM())
             log.tick()
         }
 
