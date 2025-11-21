@@ -13,11 +13,16 @@ object Controller {
 
     fun init(hardwareMap: HardwareMap) {
         Drivetrain.init(hardwareMap)
+        Intake.init(hardwareMap)
+        Clamp.init(hardwareMap)
+        Indexer.init(hardwareMap)
+        Shooter.init(hardwareMap)
         state = State.INIT
     }
 
     fun setInit()
     {
+
         state = State.INIT
     }
 

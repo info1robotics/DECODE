@@ -34,10 +34,6 @@ abstract class AutoBase(val startPose: Pose = Pose(0.0, 0.0, Math.toRadians(0.0)
     var actionQueue = ActionQueue()
 
     var full = true
-
-    //y is the axis
-    var yGain = 0// gain for the first submersible cycle
-    var extendoGain = 0//gain for extendo
 @CallSuper
     open fun onInit() {
         gamepadEx1 = GamepadEx(gamepad1)

@@ -19,9 +19,6 @@ object Intake {
         val motorConfigurationType = intake.motorType.clone()
         motorConfigurationType.achieveableMaxRPMFraction = 1.0
         intake.motorType = motorConfigurationType
-
-        sensorIntake = hardwareMap.get(RevColorSensorV3::class.java, "sensorIntake")
-
     }
 
     fun setPower(power: Double) {

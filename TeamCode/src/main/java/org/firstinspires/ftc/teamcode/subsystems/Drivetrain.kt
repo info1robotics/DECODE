@@ -34,10 +34,10 @@ object Drivetrain {
 
         motors = arrayOf(fl, fr, bl, br)
 
-        fl.direction = DcMotorSimple.Direction.REVERSE
-        bl.direction = DcMotorSimple.Direction.REVERSE
-        br.direction = DcMotorSimple.Direction.FORWARD
-        fr.direction = DcMotorSimple.Direction.FORWARD
+        fl.direction = DcMotorSimple.Direction.FORWARD
+        bl.direction = DcMotorSimple.Direction.FORWARD
+        br.direction = DcMotorSimple.Direction.REVERSE
+        fr.direction = DcMotorSimple.Direction.REVERSE
 
         motors.forEach {  motor ->
             motor.mode = RunMode.RUN_WITHOUT_ENCODER
@@ -52,10 +52,10 @@ object Drivetrain {
 
     fun initAuto(hardwareMap: HardwareMap) {
         LATERAL_MULTIPLIER = 1.1
-        fl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightRear")
-        bl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightFront")
-        br = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftFront")
-        fr = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftRear")
+        fl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftFront")
+        bl = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftRear")
+        br = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightRear")
+        fr = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightFront")
 
         motors = arrayOf(fl, fr, bl, br)
 

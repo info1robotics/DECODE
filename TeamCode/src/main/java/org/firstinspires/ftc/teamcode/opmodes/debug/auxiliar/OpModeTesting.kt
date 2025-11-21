@@ -16,7 +16,7 @@ class OpModeTesting : LinearOpMode() {
 
         while (opModeIsActive()) {
             // Keep telemetry updating if needed
-            log.add("Status", "Running")
+            log.add("Status", "ashdga")
             log.tick()
         }
     }
