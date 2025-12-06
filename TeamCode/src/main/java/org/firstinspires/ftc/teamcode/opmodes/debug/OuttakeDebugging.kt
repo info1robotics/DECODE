@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.Log
 import org.firstinspires.ftc.teamcode.subsystems.Glider
 import org.firstinspires.ftc.teamcode.subsystems.Shooter
 
-@TeleOp(name = "@OuttakeDebugging")
+@TeleOp(name = "OuttakeDebugging")
 @Config
 
 class OuttakeDebugging : LinearOpMode() {

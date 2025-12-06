@@ -37,6 +37,7 @@ class PipelineTesting : LinearOpMode() {
             log.add(Limelight.getTx().toString())
             log.add(Limelight.getTy().toString())
             log.add(dist.toString())
+            log.add(Limelight.isCentered().toString())
             log.tick()
         }
 

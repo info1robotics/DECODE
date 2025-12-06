@@ -9,32 +9,32 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 
 object Intake {
 
-    lateinit var intake:DcMotor
+    lateinit var motorIntake:DcMotor
     private lateinit var sensorIntake: RevColorSensorV3
     private var colour = "Red"//TODO change the colour that you want to collect
 
     fun init(hardwareMap: HardwareMap) {
-        intake = hardwareMap.get(DcMotor::class.java, "motorIntake")
-        intake.direction = DcMotorSimple.Direction.REVERSE
-        val motorConfigurationType = intake.motorType.clone()
+        motorIntake = hardwareMap.get(DcMotor::class.java, "motorIntake")
+        motorIntake.direction = DcMotorSimple.Direction.REVERSE
+        val motorConfigurationType = motorIntake.motorType.clone()
         motorConfigurationType.achieveableMaxRPMFraction = 1.0
-        intake.motorType = motorConfigurationType
+        motorIntake.motorType = motorConfigurationType
     }
 
     fun setPower(power: Double) {
-        intake.power = power
+        motorIntake.power = power
     }
 
     fun stop() {
-        intake.power = 0.0
+        motorIntake.power = 0.0
     }
 
     fun reverse() {
-        intake.power = -0.8
+        motorIntake.power = -0.8
     }
 
     fun take() {
-        intake.power = 0.8
+        motorIntake.power = 0.8
     }
 
 

@@ -11,6 +11,7 @@ object Glider {
     var HIGHER_LIMIT = 0.68 //~33 degrees
     var LOWER_LIMIT = 0.0   //~53 degrees
 
+    var FAR_DEGREE = 40.0
     private val distanceAngleTable = listOf(
         0.5 to 53.0,
         1.0 to 53.0,
